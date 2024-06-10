@@ -27,7 +27,7 @@ const products = [
   },
   {
     _id: '3',
-    name: 'Sony Playstation 5 Slim',
+    name: 'Sony Playstation 5 Slim Disc Edition Console',
     image: '/images/playstation-5.jpg',
     description: 'The ultimate home entertainment center starts with PlayStation. Whether you are into gaming, HD movies, television, music',
     brand: 'Sony',
