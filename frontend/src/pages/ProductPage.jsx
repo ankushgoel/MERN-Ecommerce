@@ -1,18 +1,31 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useParams, Link } from 'react-router-dom'
 import { Row, Col, Card, Image, ListGroup, Button } from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import Rating from "../components/Rating";
-import products from '../products'
+// import products from '../products'
 
 const ProductPage = () => {
   const {id: productId} = useParams();
-  const product = products.find((p) => p._id === productId)
-//   console.log(product);
+  const [product, setProduct] = useState({});
+
+  useEffect(() => {
+    const getProduct = async () => {
+      const {data} = await axios.get('/api/products/'+productId);
+      // console.log(data);
+      setProduct(data);
+    }
+    getProduct()
+  }, [productId])
+
+  // const product = products.find((p) => p._id === productId)
+  // console.log(product);
 
   return (
     <>
     <Link className='btn btn-light my-3' to='/'> <FaArrowLeft /> Go Back</Link>
-        
+    { product &&
     <Row>
         <Col md={5}>
         <Image src={product.image} alt={product.name} fluid />
@@ -63,7 +76,7 @@ const ProductPage = () => {
                 </ListGroup>
               </Card>
             </Col>
-    </Row>
+    </Row>}
     </>
   )
 }
