@@ -1,6 +1,8 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import products from './data/products.js';
-const PORT = 8000;
+dotenv.config();
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 
@@ -15,7 +17,7 @@ app.get('/api/products', (req, res) => {
 app.get('/api/products/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const product = products.find((p) => p._id == id);
-  console.log(id, product);
+  //   console.log(id, product);
   res.json(product);
 });
 
