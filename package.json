@@ -1,0 +1,16 @@
+{
+  "name": "mern-ecommerce",
+  "version": "1.0.0",
+  "description": "An e-commerce store built with MERN stack, and utilizes third party API",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ankush",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
