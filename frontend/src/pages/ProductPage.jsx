@@ -3,6 +3,7 @@ import { Row, Col, Card, Image, ListGroup, Button } from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import Rating from '../components/Rating';
 import { useGetProductDetailsByIdQuery } from '../slices/productsApiSlice';
+import Loader from '../components/Loader';
 // import products from '../products'
 
 const ProductPage = () => {
@@ -13,7 +14,8 @@ const ProductPage = () => {
   return (
     <>
       {isLoading ? (
-        <h2>Loading...</h2>
+        // <h2>Loading...</h2>
+        <Loader />
       ) : isError ? (
         <div>{error?.data?.message || error?.error}</div>
       ) : (
