@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { Row, Col, Card, Image, ListGroup, Button } from 'react-bootstrap';
+import { Row, Col, Card, Image, ListGroup, Button, Alert } from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import Rating from '../components/Rating';
 import { useGetProductDetailsByIdQuery } from '../slices/productsApiSlice';
@@ -17,7 +17,9 @@ const ProductPage = () => {
         // <h2>Loading...</h2>
         <Loader />
       ) : isError ? (
-        <div>{error?.data?.message || error?.error}</div>
+        <Alert variant="danger" dismissible>
+          {error?.data?.message || error?.error}
+        </Alert>
       ) : (
         <>
           <Link className="btn btn-light my-3" to="/">
