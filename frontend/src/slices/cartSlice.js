@@ -15,7 +15,7 @@ const cartSlice = createSlice({
       state.cartItems = [...state.cartItems, item];
 
       // Calculate cart item price
-      state.itemsPrice = state.cartItems.reduce((acc, item) => acc + item.price * item, 0);
+      state.itemsPrice = state.cartItems.reduce((acc, item) => acc + item.price, 0);
 
       // Calculate the shipping price | If items price is greater than 499, then shipping is free | If not, shipping is 50
       state.shippingPrice = addDecimals(state.itemsPrice > 499 ? 0 : 50);
