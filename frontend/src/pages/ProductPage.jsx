@@ -1,15 +1,24 @@
 import { useParams, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Row, Col, Card, Image, ListGroup, Button, Alert } from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import Rating from '../components/Rating';
 import { useGetProductDetailsByIdQuery } from '../slices/productsApiSlice';
 import Loader from '../components/Loader';
+import { addToCart } from '../slices/cartSlice';
 // import products from '../products'
 
 const ProductPage = () => {
   const { id: productId } = useParams();
   const { data: product, isLoading, isError, error } = useGetProductDetailsByIdQuery(productId);
   // console.log(product);
+
+  const dispatch = useDispatch();
+
+  const addToCartHandler = () => {
+    dispatch(addToCart(product));
+    alert('Product added to cart!');
+  };
 
   return (
     <>
@@ -60,7 +69,7 @@ const ProductPage = () => {
                       </Row>
                     </ListGroup.Item>
                     <ListGroup.Item>
-                      <Button className="btn-block" type="button" disabled={product.countInStock === 0}>
+                      <Button className="btn-block" type="button" disabled={product.countInStock === 0} onClick={addToCartHandler}>
                         Add To Cart
                       </Button>
                     </ListGroup.Item>
