@@ -1,10 +1,17 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Row, Col, Card, Image, ListGroup, Button, Alert, Form } from 'react-bootstrap';
 import { FaArrowLeft, FaTrash } from 'react-icons/fa';
+import { addToCart } from '../slices/cartSlice';
 
 const CartPage = () => {
   const { cartItems } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  const updateQtyHandler = async (product, qty) => {
+    dispatch(addToCart({ ...product, qty }));
+  };
+
   return (
     <>
       <Row>
@@ -32,7 +39,11 @@ const CartPage = () => {
                       {/* Quantity & Delete */}
                       <Row className="align-self-end">
                         <Col md={3} lg={2}>
-                          <Form.Control as="select" value={item.qty} onChange={(e) => {}}>
+                          <Form.Control
+                            as="select"
+                            value={item.qty}
+                            onChange={(e) => updateQtyHandler(item, Number(e.target.value))}
+                          >
                             {[...Array(item.countInStock).keys()].map((x) => (
                               <option value={x + 1} key={x + 1}>
                                 {x + 1}
