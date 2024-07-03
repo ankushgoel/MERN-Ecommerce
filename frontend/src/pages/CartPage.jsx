@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Row, Col, Card, Image, ListGroup, Button, Alert, Form } from 'react-bootstrap';
 import { FaArrowLeft, FaTrash } from 'react-icons/fa';
 import { addToCart, removeFromCart } from '../slices/cartSlice';
@@ -7,13 +8,19 @@ import { addToCart, removeFromCart } from '../slices/cartSlice';
 const CartPage = () => {
   const { cartItems, itemsPrice } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const updateQtyHandler = async (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
+    toast('Cart Updated!');
   };
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
+  };
+
+  const checkoutHandler = () => {
+    navigate('/login?redirect=/shipping');
   };
 
   return (
@@ -58,7 +65,7 @@ const CartPage = () => {
                         <Col md={2}>
                           <Button
                             type="button"
-                            variant="light"
+                            variant="outline-danger"
                             onClick={(e) => removeFromCartHandler(item._id)}
                           >
                             <FaTrash />
@@ -86,7 +93,12 @@ const CartPage = () => {
                 </h4>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button type="button" className="btn-block" disabled={cartItems.length === 0}>
+                <Button
+                  type="button"
+                  className="btn-block"
+                  disabled={cartItems.length === 0}
+                  onClick={checkoutHandler}
+                >
                   Proceed to Checkout
                 </Button>
               </ListGroup.Item>
