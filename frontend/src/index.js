@@ -18,6 +18,7 @@ import reportWebVitals from './reportWebVitals'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
 import LoginPage from './pages/LoginPage'
+import ProfilePage from './pages/ProfilePage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       <Route path="/product/:id" element={<ProductPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Route>
   )
 )

@@ -87,7 +87,7 @@ const CartPage = () => {
             <ListGroup variant="flush">
               <ListGroup.Item>
                 <h4>
-                  Subtotal (₹ {itemsPrice})
+                  Subtotal (₹ {itemsPrice || 0.0})
                   {/* ({cartItems.reduce((acc, item) => acc + item.qty, 0)} items): ₹
                   {cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)} */}
                 </h4>
