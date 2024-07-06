@@ -1,14 +1,48 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
+import Loader from '../components/Loader';
+import { useLoginMutation } from '../slices/usersApiSlice';
+import { setCredentials } from '../slices/authSlice';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [login, { isLoading }] = useLoginMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const { search } = useLocation();
+  const sp = new URLSearchParams(search);
+  const redirect = sp.get('redirect') || '/';
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log('submit');
+    try {
+      if (!email || !password) {
+        throw new Error('Fill in all details before submitting!');
+      }
+      const res = await login({ email, password }).unwrap(); // Unwrap - extracts resolved value from Promise
+      //   console.log(res);
+      dispatch(setCredentials(res));
+      navigate(redirect);
+    } catch (err) {
+      console.log('error', err.message);
+      toast.error(err?.data?.message || err?.message || err?.error);
+    }
   };
 
   return (
@@ -38,12 +72,15 @@ const LoginPage = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Button type="submit" variant="primary">
+            <Button disabled={isLoading} type="submit" variant="primary">
               Sign In
             </Button>
             <span style={{ float: 'right' }}>
-              New Customer? <Link to={`/register`}>Register</Link>
+              New Customer?{' '}
+              <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>Register</Link>
             </span>
+
+            {isLoading && <Loader />}
           </Form>
         </Col>
       </Row>
