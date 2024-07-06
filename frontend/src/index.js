@@ -1,6 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store'
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,6 +17,7 @@ import HomePage from './pages/HomePage'
 import reportWebVitals from './reportWebVitals'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
+import LoginPage from './pages/LoginPage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +25,7 @@ const router = createBrowserRouter(
       <Route index element={<HomePage />} />
       <Route path="/product/:id" element={<ProductPage />} />
       <Route path="/cart" element={<CartPage />} />
+      <Route path="/login" element={<LoginPage />} />
     </Route>
   )
 )
