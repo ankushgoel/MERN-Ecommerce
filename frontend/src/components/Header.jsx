@@ -1,12 +1,34 @@
-import React from 'react';
 import { Navbar, Nav, Container, Badge, NavDropdown } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+
+import { useLogoutMutation } from '../slices/usersApiSlice';
+import { logout } from '../slices/authSlice';
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [logoutApi] = useLogoutMutation();
+
+  const logoutHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await logoutApi().unwrap(); // Unwrap - extracts resolved value from Promise
+      // console.log(res);
+      dispatch(logout(res));
+      navigate('/');
+    } catch (err) {
+      console.log('error', err.message);
+      toast.error(err?.data?.message || err?.message || err?.error);
+    }
+  };
 
   return (
     <header>
@@ -31,7 +53,7 @@ const Header = () => {
                   <NavDropdown.Item as={Link} to="/profile">
                     Profile
                   </NavDropdown.Item>
-                  <NavDropdown.Item>Logout</NavDropdown.Item>
+                  <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
                 </NavDropdown>
               ) : (
                 <Nav.Link as={Link} to="/login">
