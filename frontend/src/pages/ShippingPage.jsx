@@ -3,6 +3,7 @@ import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { saveShippingAddress } from '../slices/cartSlice';
+import CheckoutSteps from '../components/CheckoutSteps';
 
 const ShippingPage = () => {
   const cart = useSelector((state) => state.cart);
@@ -26,6 +27,7 @@ const ShippingPage = () => {
   return (
     <Container>
       <Row className="justify-content-md-center">
+        <CheckoutSteps step1 step2 />
         <Col xs={12} md={6}>
           <h1>Shipping</h1>
           <Form onSubmit={submitHandler}>

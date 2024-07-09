@@ -26,3 +26,19 @@ main {
     white-space: nowrap;
     /* Prevent wrapping */
 }
+
+a.checkout-step {
+    position: relative;
+    text-align: center;
+}
+
+a.checkout-step:after {
+    position: absolute;
+    bottom: 45%;
+    width: 1.4rem;
+    height: 2px;
+    background: #3c4c5d;
+    content: "";
+    display: block;
+    left: 86%;
+}
