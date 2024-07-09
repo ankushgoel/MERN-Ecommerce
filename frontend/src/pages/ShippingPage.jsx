@@ -1,15 +1,26 @@
 import { useState } from 'react';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { saveShippingAddress } from '../slices/cartSlice';
 
 const ShippingPage = () => {
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('');
+  const cart = useSelector((state) => state.cart);
+  const { shippingAddress } = cart;
+
+  const [address, setAddress] = useState(shippingAddress.address || '');
+  const [city, setCity] = useState(shippingAddress.city || '');
+  const [state, setState] = useState(shippingAddress.state || '');
+  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode || '');
+  const [country, setCountry] = useState(shippingAddress.country || '');
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log('submit');
+    dispatch(saveShippingAddress({ address, city, state, postalCode, country }));
+    navigate('/payment');
   };
 
   return (
@@ -34,6 +45,15 @@ const ShippingPage = () => {
                 placeholder="Enter city"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group controlId="state" className="my-2">
+              <Form.Label>State</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter state"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
               ></Form.Control>
             </Form.Group>
             <Form.Group controlId="postalCode" className="my-2">
