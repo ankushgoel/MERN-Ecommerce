@@ -49,7 +49,7 @@ const LoginPage = () => {
     <Container>
       <Row className="justify-content-md-center">
         <Col xs={12} md={6}>
-          <h1>Login Page</h1>
+          <h1>Login</h1>
 
           <Form onSubmit={submitHandler}>
             <Form.Group className="my-2" controlId="email">
