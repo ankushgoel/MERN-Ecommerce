@@ -8,6 +8,7 @@ import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 
 const PORT = process.env.PORT || 8080;
 
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Error Handler Middleware
 app.use(notFound);
