@@ -2,11 +2,11 @@ const addDecimals = (num) => {
   return (Math.round(num * 100) / 100).toFixed(2);
 };
 
-const toCurrency = (num) => {
-  let result = num.toLocaleString('en-IN', {
+export const toCurrency = (num) => {
+  let result = Number(num).toLocaleString('en-IN', {
     maximumFractionDigits: 2,
-    // style: 'currency',
-    // currency: 'INR',
+    style: 'currency',
+    currency: 'INR',
   });
   // console.log(result);
   return result;
@@ -14,7 +14,7 @@ const toCurrency = (num) => {
 
 export const updateCart = (state) => {
   // Calculate cart item price
-  state.itemsPrice = toCurrency(
+  state.itemsPrice = addDecimals(
     state.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   );
 
