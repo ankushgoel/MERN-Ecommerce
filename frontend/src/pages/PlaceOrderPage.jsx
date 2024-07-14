@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
-import { Button, Row, Col, ListGroup, Card } from 'react-bootstrap';
+import { Button, Row, Col, ListGroup, Card, Image, Alert } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import CheckoutSteps from '../components/CheckoutSteps';
 import { toCurrency } from '../utils/cartUtils';
+import { useCreateOrderMutation } from '../slices/ordersApiSlice';
+import Loader from '../components/Loader';
 
 const PlaceOrderPage = () => {
   const cart = useSelector((state) => state.cart);
   const { shippingAddress, paymentMethod } = cart;
+
+  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   const navigate = useNavigate();
 
@@ -45,6 +49,31 @@ const PlaceOrderPage = () => {
               <strong>Method: </strong>
               {paymentMethod}
             </ListGroup.Item>
+            <ListGroup.Item>
+              <h2>Order Items</h2>
+              {cart.cartItems.length === 0 ? (
+                <Alert>Your cart is empty</Alert>
+              ) : (
+                <ListGroup variant="flush">
+                  {cart.cartItems.map((item, index) => (
+                    <ListGroup.Item key={index}>
+                      <Row>
+                        <Col md={1}>
+                          <Image src={item.image} alt={item.name} fluid rounded />
+                        </Col>
+                        <Col>
+                          <Link to={`/product/${item.product}`}>{item.name}</Link>
+                        </Col>
+                        <Col md={4}>
+                          {item.qty} x {toCurrency(item.price)} ={' '}
+                          {toCurrency(item.qty * item.price)}
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              )}
+            </ListGroup.Item>
           </ListGroup>
         </Col>
         <Col md={4}>
@@ -71,7 +100,11 @@ const PlaceOrderPage = () => {
                   <Col>{toCurrency(cart.totalPrice)}</Col>
                 </Row>
               </ListGroup.Item>
-
+              {error && (
+                <ListGroup.Item>
+                  <Alert variant="danger">{error}</Alert>
+                </ListGroup.Item>
+              )}
               <ListGroup.Item>
                 <Button
                   type="button"
@@ -81,6 +114,7 @@ const PlaceOrderPage = () => {
                 >
                   Place Order
                 </Button>
+                {isLoading && <Loader />}
               </ListGroup.Item>
             </ListGroup>
           </Card>
