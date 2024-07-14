@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { Button, Row, Col, ListGroup, Card, Image, Alert } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import CheckoutSteps from '../components/CheckoutSteps';
 import { toCurrency } from '../utils/cartUtils';
 import { useCreateOrderMutation } from '../slices/ordersApiSlice';
+import { clearCartItems } from '../slices/cartSlice';
 import Loader from '../components/Loader';
 
 const PlaceOrderPage = () => {
@@ -15,6 +17,7 @@ const PlaceOrderPage = () => {
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!shippingAddress?.address) {
@@ -25,7 +28,22 @@ const PlaceOrderPage = () => {
   }, [shippingAddress, paymentMethod, navigate]);
 
   const placeOrderHandler = async () => {
-    console.log('place-order');
+    try {
+      const res = await createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      }).unwrap();
+      dispatch(clearCartItems());
+      navigate(`/order/${res._id}`);
+    } catch (err) {
+      console.log(err);
+      return toast.error(err.data.message);
+    }
   };
 
   return (
@@ -52,7 +70,7 @@ const PlaceOrderPage = () => {
             <ListGroup.Item>
               <h2>Order Items</h2>
               {cart.cartItems.length === 0 ? (
-                <Alert>Your cart is empty</Alert>
+                <Alert variant="warning">Your cart is empty</Alert>
               ) : (
                 <ListGroup variant="flush">
                   {cart.cartItems.map((item, index) => (
@@ -102,7 +120,7 @@ const PlaceOrderPage = () => {
               </ListGroup.Item>
               {error && (
                 <ListGroup.Item>
-                  <Alert variant="danger">{error}</Alert>
+                  <Alert variant="danger">{error.data?.message || error.message}</Alert>
                 </ListGroup.Item>
               )}
               <ListGroup.Item>

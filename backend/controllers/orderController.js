@@ -20,7 +20,11 @@ const addOrderItems = asyncHandler(async (req, res) => {
   } else {
     const order = new Order({
       user: req.user._id,
-      orderItems,
+      orderItems: orderItems.map((x) => ({
+        ...x,
+        product: x._id,
+        _id: undefined,
+      })),
       shippingAddress,
       paymentMethod,
       itemsPrice,
@@ -45,7 +49,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.id).populate('user', 'name email');
   if (order) {
     res.json(order);
   } else {
