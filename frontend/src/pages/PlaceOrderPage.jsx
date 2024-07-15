@@ -52,7 +52,7 @@ const PlaceOrderPage = () => {
       <Row>
         <Col xs={12} md={8}>
           {/* <h1>Place Order</h1> */}
-          <ListGroup variant="flush">
+          <ListGroup>
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
@@ -80,7 +80,7 @@ const PlaceOrderPage = () => {
                           <Image src={item.image} alt={item.name} fluid rounded />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}>{item.name}</Link>
+                          <Link to={`/product/${item._id}`}>{item.name}</Link>
                         </Col>
                         <Col md={4}>
                           {item.qty} x {toCurrency(item.price)} ={' '}
@@ -98,21 +98,21 @@ const PlaceOrderPage = () => {
           <Card>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <h2>Order Summary</h2>
+                <h2 className="m-0">Order Summary</h2>
               </ListGroup.Item>
-              <ListGroup.Item>
+              <ListGroup.Item className="pb-1 border-0">
                 <Row>
-                  <Col>Items</Col>
+                  <Col>Items Price</Col>
                   <Col>{toCurrency(cart.itemsPrice)}</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroup.Item>
+              <ListGroup.Item className="py-1 border-0">
                 <Row>
                   <Col>Shipping</Col>
                   <Col>{toCurrency(cart.shippingPrice)}</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroup.Item>
+              <ListGroup.Item className="pt-1">
                 <Row>
                   <Col>Total</Col>
                   <Col>{toCurrency(cart.totalPrice)}</Col>
