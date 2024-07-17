@@ -31,6 +31,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 
+app.use('/api/config/paypal', (req, res) => res.send({ cleintId: process.env.PAYPAL_CLIENT_ID }));
+
 // Error Handler Middleware
 app.use(notFound);
 app.use(errorHandler);
