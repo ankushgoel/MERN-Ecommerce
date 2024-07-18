@@ -48,15 +48,38 @@ const OrderPage = () => {
     }
   }, [order, paypal, errorPaypalClient, loadingPaypalClient, paypalDispatch]);
 
-  // async function onApproveTest() {
-  //   await payOrder({ orderId, details: {} });
-  //   refetch();
-  //   toast.success('Payment Successful!');
-  // }
+  async function onApproveTest() {
+    await payOrder({ orderId, details: {} });
+    refetch();
+    toast.success('Payment Successful!');
+  }
 
-  function onApprove(data, actions) {}
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async function (details) {
+      console.log(details);
+      try {
+        await payOrder({ orderId, details });
+        refetch();
+        toast.success('Payment Successful!');
+      } catch (err) {
+        toast.error(err?.data?.message || err?.message);
+      }
+    });
+  }
 
-  function createOrder(data, actions) {}
+  function createOrder(data, actions) {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: Math.round(order.totalPrice / 84) },
+          },
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
+  }
 
   function onError(err) {
     console.log(err?.data?.message || err?.message);
