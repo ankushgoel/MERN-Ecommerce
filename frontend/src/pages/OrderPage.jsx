@@ -1,15 +1,26 @@
 import { useParams, Link } from 'react-router-dom';
-// import { useDispatch } from 'react-redux';
-import { Row, Col, Card, Image, ListGroup, Alert } from 'react-bootstrap';
+// import { useSelector } from 'react-redux';
+import { Row, Col, Card, Image, ListGroup, Alert, Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 import { toCurrency } from '../utils/cartUtils';
-import { useGetOrderDetailsQuery } from '../slices/ordersApiSlice';
+import { useGetOrderDetailsQuery, usePayOrderMutation } from '../slices/ordersApiSlice';
 import Loader from '../components/Loader';
 
 const OrderPage = () => {
+  // const { userInfo } = useSelector((state) => state.auth);
+
   const { id: orderId } = useParams();
-  const { data: order, isLoading, isError, error } = useGetOrderDetailsQuery(orderId);
+  const { data: order, refetch, isLoading, isError, error } = useGetOrderDetailsQuery(orderId);
   // console.log(order);
+
+  const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation(orderId);
+
+  async function onApproveTest() {
+    await payOrder({ orderId, details: {} });
+    refetch();
+    toast.success('Payment Successful!');
+  }
 
   return (
     <>
@@ -100,7 +111,16 @@ const OrderPage = () => {
                       <Col>{toCurrency(order.totalPrice)}</Col>
                     </Row>
                   </ListGroup.Item>
-                  {/* PAY ORDER PLACEHOLDER */}
+                  {/* PAY ORDER */}
+                  {!order.isPaid && (
+                    <ListGroup.Item>
+                      {loadingPay && <Loader />}
+
+                      <div>
+                        <Button onClick={onApproveTest}>Test Pay Order</Button>
+                      </div>
+                    </ListGroup.Item>
+                  )}
                   {/* {ADMIN MARK AS DELIVERED PLACEHOLDER} */}
                 </ListGroup>
               </Card>
